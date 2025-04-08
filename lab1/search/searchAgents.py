@@ -282,7 +282,7 @@ class CornersProblem(search.SearchProblem):
         Stores the walls, pacman's starting position and corners.
         """
         self.walls = startingGameState.getWalls()
-        self.startingPosition = startingGameState.getPacmanPosition()
+        self.startingPosition = startingGameState.getPacmanPosition() # start position
         top, right = self.walls.height-2, self.walls.width-2
         self.corners = ((1,1), (1,top), (right, 1), (right, top))
         for corner in self.corners:
@@ -296,14 +296,28 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        corners_visited = [False] * len(self.corners)
+        start_pos = self.startingPosition
+        
+        return (start_pos, corners_visited)  # Return the starting position and corners visited
+        # util.raiseNotDefined()
 
     def isGoalState(self, state: Any):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        
+        " all corners have been visited, which means the goal state has been reached "
+        corners_visited = state[1]
+        flag = True
+        for i in range(len(corners_visited)):
+            if not corners_visited[i]:
+                flag = False
+                break
+        return flag
+        
+        # util.raiseNotDefined()
 
     def getSuccessors(self, state: Any):
         """
@@ -326,6 +340,19 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x, y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                next_corners_visited = state[1].copy()
+                # Check if the next position is a corner
+                for i in range(len(self.corners)):
+                    if (nextx, nexty) == self.corners[i]:
+                        next_corners_visited[i] = True
+                        break 
+                next_state = ((nextx, nexty), next_corners_visited)
+                cost = 1
+                successors.append((next_state, action, cost))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors

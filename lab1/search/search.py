@@ -90,7 +90,7 @@ def depthFirstSearch(problem: SearchProblem):
     from util import Stack
     
     stack = Stack()
-    visited = set()
+    visited = []
     
     start = problem.getStartState()
     stack.push((start, []))
@@ -101,7 +101,7 @@ def depthFirstSearch(problem: SearchProblem):
             return path
         
         if cur not in visited:
-            visited.add(cur)
+            visited.append(cur)
             for successor, action, _ in problem.getSuccessors(cur):
                 if successor not in visited:
                     stack.push((successor, path + [action]))
@@ -112,7 +112,7 @@ def breadthFirstSearch(problem: SearchProblem):
     "*** YOUR CODE HERE ***"
     from util import Queue
     queue = Queue()
-    visited = set()
+    visited = []
     start = problem.getStartState()
     queue.push((start, []))
     
@@ -122,7 +122,7 @@ def breadthFirstSearch(problem: SearchProblem):
             return path
         
         if cur not in visited:
-            visited.add(cur)
+            visited.append(cur)
             for successor, action, _ in problem.getSuccessors(cur):
                 if successor not in visited:
                     queue.push((successor, path + [action]))
@@ -134,7 +134,7 @@ def uniformCostSearch(problem: SearchProblem):
     "*** YOUR CODE HERE ***"
     from util import PriorityQueue
     queue = PriorityQueue()
-    visited = set()
+    visited = []
     start = problem.getStartState()
     queue.push((start, []), 0)
     
@@ -144,7 +144,7 @@ def uniformCostSearch(problem: SearchProblem):
             return path
         
         if cur not in visited:
-            visited.add(cur)
+            visited.append(cur)
             for successor, action, cost in problem.getSuccessors(cur):
                 if successor not in visited:
                     new_cost = problem.getCostOfActions(path + [action])
@@ -168,7 +168,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     prio = heuristic(start, problem) + 0 # start's prio is 0 + heuristic
     
     queue = PriorityQueue()
-    visited = set()
+    visited = []
     queue.push((start, []), prio)
     
     while not queue.isEmpty():
@@ -177,7 +177,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
             return path
         
         if cur not in visited:
-            visited.add(cur)
+            visited.append(cur)
             for successor, action, _ in problem.getSuccessors(cur):
                 if successor not in visited:
                     new_actions = path + [action] # the astions to this successor
