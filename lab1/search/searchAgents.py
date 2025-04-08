@@ -281,6 +281,7 @@ class CornersProblem(search.SearchProblem):
         """
         Stores the walls, pacman's starting position and corners.
         """
+        self.startingGameState = startingGameState
         self.walls = startingGameState.getWalls()
         self.startingPosition = startingGameState.getPacmanPosition() # start position
         top, right = self.walls.height-2, self.walls.width-2
@@ -388,7 +389,18 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    
+    cur, corners_visited = state
+    unvisited_corners = [corner for i, corner in enumerate(corners) if not corners_visited[i]]
+    max = 0
+    # find the max distance for the unvisited corners
+    for corner in unvisited_corners:
+        dist = mazeDistance(cur, corner, problem.startingGameState) # Use mazeDistance to calculate the distance
+        if dist > max:
+            max = dist
+    return max
+    
+    # return 0 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
